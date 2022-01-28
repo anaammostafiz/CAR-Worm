@@ -14,6 +14,8 @@
 * limitations under the License.
 *******************************************************************************/
 
+// main code is in void loop(){}
+
 #include <DynamixelShield.h>
 
 #if defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_MEGA2560)
@@ -33,7 +35,9 @@ DynamixelShield dxl;
 
 //This namespace is required to use Control table item names
 using namespace ControlTableItem;
-
+String input;
+String contract = "c";
+String expand = "e";
 void setup() {
   // put your setup code here, to run once:
   
@@ -54,22 +58,33 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
   
+  // open the serial monitor at the top right
+  // type in "c" and press enter to contract the worm to -2000
+  // type in "e" and press enter to expand the worm to 0
+  
+  if (Serial.available() > 0) {
+                // read the incoming string:
+                input = Serial.readString();
+                input.trim();
+                if (input.equals(contract)){
+                    //  Set Goal Position in RAW value
+                    dxl.setGoalPosition(DXL_ID, -2000);
+                    delay(1000);
+                    //  Print present position in raw value
+                    DEBUG_SERIAL.print("Contracted to : ");
+                    DEBUG_SERIAL.println(dxl.getPresentPosition(DXL_ID));
+                    delay(1000);
+                }
+                if (input.equals(expand)){
+                    //  Set Goal Position in RAW value
+                    dxl.setGoalPosition(DXL_ID, 0);
+                    delay(1000);
+                    //  Print present position in raw value
+                    DEBUG_SERIAL.print("Expanded to : ");
+                    DEBUG_SERIAL.println(dxl.getPresentPosition(DXL_ID));
+                    delay(1000);
+                }  
+        }
   // Please refer to e-Manual(http://emanual.robotis.com/docs/en/parts/interface/dynamixel_shield/) for available range of value. 
-  // Set Goal Position in RAW value
-  dxl.setGoalPosition(DXL_ID, -512);
-  delay(1000);
-  // Print present position in raw value
-  DEBUG_SERIAL.print("Present Position(raw) : ");
-  DEBUG_SERIAL.println(dxl.getPresentPosition(DXL_ID));
-  delay(1000);
-
-  //Set Goal Position in DEGREE value
-  dxl.setGoalPosition(DXL_ID, 0);
-  delay(1000);
-  //Print present position in degree value
-  DEBUG_SERIAL.print("Present Position(degree) : ");
-  DEBUG_SERIAL.println(dxl.getPresentPosition(DXL_ID, UNIT_DEGREE));
-  delay(1000);
 }
