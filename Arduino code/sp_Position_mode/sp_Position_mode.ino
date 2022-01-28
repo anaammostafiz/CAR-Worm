@@ -29,6 +29,7 @@
 #endif
 
 const uint8_t DXL_ID = 13;
+const uint8_t DXL_ID_1 = 14;
 const float DXL_PROTOCOL_VERSION = 2.0;
 
 DynamixelShield dxl;
@@ -50,11 +51,15 @@ void setup() {
   dxl.setPortProtocolVersion(DXL_PROTOCOL_VERSION);
   // Get DYNAMIXEL information
   dxl.ping(DXL_ID);
+  dxl.ping(DXL_ID_1);
 
   // Turn off torque when configuring items in EEPROM area
   dxl.torqueOff(DXL_ID);
   dxl.setOperatingMode(DXL_ID, OP_EXTENDED_POSITION);
   dxl.torqueOn(DXL_ID);
+  dxl.torqueOff(DXL_ID_1);
+  dxl.setOperatingMode(DXL_ID_1, OP_EXTENDED_POSITION);
+  dxl.torqueOn(DXL_ID_1);
 }
 
 void loop() {
@@ -69,20 +74,30 @@ void loop() {
                 input.trim();
                 if (input.equals(contract)){
                     //  Set Goal Position in RAW value
-                    dxl.setGoalPosition(DXL_ID, -2000);
+                    dxl.setGoalPosition(DXL_ID, -500);
+                    dxl.setGoalPosition(DXL_ID_1, -500);
                     delay(1000);
                     //  Print present position in raw value
-                    DEBUG_SERIAL.print("Contracted to : ");
+                    DEBUG_SERIAL.print(DXL_ID);
+                    DEBUG_SERIAL.print(" Contracted to : ");
                     DEBUG_SERIAL.println(dxl.getPresentPosition(DXL_ID));
+                    DEBUG_SERIAL.print(DXL_ID_1);
+                    DEBUG_SERIAL.print(" Contracted to : ");
+                    DEBUG_SERIAL.println(dxl.getPresentPosition(DXL_ID_1));
                     delay(1000);
                 }
                 if (input.equals(expand)){
                     //  Set Goal Position in RAW value
                     dxl.setGoalPosition(DXL_ID, 0);
+                    dxl.setGoalPosition(DXL_ID_1, 0);
                     delay(1000);
                     //  Print present position in raw value
-                    DEBUG_SERIAL.print("Expanded to : ");
+                    DEBUG_SERIAL.print(DXL_ID);
+                    DEBUG_SERIAL.print(" Expanded to : ");
                     DEBUG_SERIAL.println(dxl.getPresentPosition(DXL_ID));
+                    DEBUG_SERIAL.print(DXL_ID_1);
+                    DEBUG_SERIAL.print(" Expanded to : ");
+                    DEBUG_SERIAL.println(dxl.getPresentPosition(DXL_ID_1));
                     delay(1000);
                 }  
         }
