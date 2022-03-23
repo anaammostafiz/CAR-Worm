@@ -60,6 +60,8 @@ void setup() {
   dxl.torqueOff(DXL_ID_1);
   dxl.setOperatingMode(DXL_ID_1, OP_EXTENDED_POSITION);
   dxl.torqueOn(DXL_ID_1);
+  dxl.writeControlTableItem(PROFILE_ACCELERATION,DXL_ID,PROFILE_ACCELERATION*16);
+  dxl.writeControlTableItem(PROFILE_ACCELERATION,DXL_ID_1,PROFILE_ACCELERATION*16);
 }
 
 void loop() {
@@ -74,8 +76,8 @@ void loop() {
                 input.trim();
                 if (input.equals(contract)){
                     //  Set Goal Position in RAW value
-                    dxl.setGoalPosition(DXL_ID, -500);
-                    dxl.setGoalPosition(DXL_ID_1, -500);
+                    dxl.setGoalPosition(DXL_ID, -2000);
+                    dxl.setGoalPosition(DXL_ID_1, -1000);
                     delay(1000);
                     //  Print present position in raw value
                     DEBUG_SERIAL.print(DXL_ID);
