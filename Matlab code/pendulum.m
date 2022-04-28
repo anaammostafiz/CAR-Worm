@@ -6,7 +6,7 @@ for i = 1:361
     tau(i) = m*l^(2)*alpha + m*g*l*cosd(theta(i));
 end
 plot(theta,tau);
-title('Torque vs. Angle');
+title('Torque vs. Angle of Rotation');
 xlabel('Angle (degrees)');
 ylabel('Torque (N-m)');
 xlim([0 360])
